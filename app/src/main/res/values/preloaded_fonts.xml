@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/bungee_inline</item>
+        <item>@font/convergence</item>
+        <item>@font/lilita_one</item>
+        <item>@font/passion_one_bold</item>
+        <item>@font/russo_one</item>
+    </array>
+</resources>
