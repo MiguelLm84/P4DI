@@ -15,7 +15,6 @@ public class ActivitySplash extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         setContentView(R.layout.splash_planta);
 
         new Handler().postDelayed(() -> startActivity(new Intent(ActivitySplash.this, ActivityPrincipal.class)), 1500);

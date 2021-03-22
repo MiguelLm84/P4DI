@@ -1,81 +1,151 @@
 package com.miguel_lm.appmygarden.ui;
 
-import android.app.AlertDialog;
-import android.content.Intent;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.tabs.TabLayout;
 import com.miguel_lm.appmygarden.R;
 import com.miguel_lm.appmygarden.core.Planta;
 import com.miguel_lm.appmygarden.core.RepositorioPlantas;
 
-import java.util.ArrayList;
-import java.util.List;
+public class ActivityPrincipal extends AppCompatActivity implements ListenerCambioPlanta {
 
-import static com.miguel_lm.appmygarden.ui.ActivityDetalle.CLAVE_PLANTA;
-
-public class ActivityPrincipal extends AppCompatActivity implements SeleccionarPlanta {
-
-    private AdapterPlantas adapterPlantas;
-    private List<Planta> listaPlantasEscogidas;
     private long tiempoParaSalir = 0;
-    private TextView textViewNoPlantas;
+    private Fragment_Mi_Jardin fragment_mi_jardin;
+    private FragmentPlantas fragmentPlantas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-        
-        textViewNoPlantas = findViewById(R.id.textViewNoPlantas);
 
-        guardarPlantas();
+        if (recibiendoDatosTema()) {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
-        RecyclerView recyclerViewPlantas = findViewById(R.id.recyclerViewPlantas);
-        recyclerViewPlantas.setLayoutManager(new GridLayoutManager(this, 2));
-        adapterPlantas = new AdapterPlantas(this, this);
-        recyclerViewPlantas.setAdapter(adapterPlantas);
+        } else {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
 
-        listaPlantasEscogidas = RepositorioPlantas.getInstance(this).obtenerPlantasSeleccionadas();
+        fragment_mi_jardin = new Fragment_Mi_Jardin();
+        mostrarFragment(fragment_mi_jardin);
 
-        adapterPlantas.actualizarListado(listaPlantasEscogidas);
+        guardarPlantasEnBD();
 
-        comprobarElementos();
+        TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
+        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                Fragment frag = null;
+                switch (tab.getPosition()) {
+                    case 0: {
+                        if (fragment_mi_jardin == null)
+                            fragment_mi_jardin = new Fragment_Mi_Jardin();
+                        frag = fragment_mi_jardin;
+                        break;
+                    }
+                    case 1: {
+                        if (fragmentPlantas == null)
+                            fragmentPlantas = FragmentPlantas.newInstance(ActivityPrincipal.this);
+                        frag = fragmentPlantas;
+                        break;
+                    }
+                }
+
+                mostrarFragment(frag);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
-    
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_principal_planta, menu);
+        int FlagsModoOscuro = this.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
 
-        return true;
+        switch (FlagsModoOscuro) {
+
+            case Configuration.UI_MODE_NIGHT_YES:
+                menu.getItem(0).setIcon(R.drawable.moon);
+                break;
+
+            case Configuration.UI_MODE_NIGHT_NO:
+                menu.getItem(0).setIcon(R.drawable.sun);
+                break;
+
+            case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                break;
+        }
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        if (item.getItemId() == R.id.accionEliminar) {
-            accionEliminar();
+        int id = item.getItemId();
+        int FlagsModoOscuro = this.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+
+        if (id == R.id.light_dark_theme) {
+
+            if (FlagsModoOscuro == Configuration.UI_MODE_NIGHT_YES) {
+                item.setIcon(R.drawable.sun);
+                getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                guardandoDatosTema(false);
+
+            } else if (FlagsModoOscuro == Configuration.UI_MODE_NIGHT_NO) {
+
+                item.setIcon(R.drawable.moon);
+                getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                guardandoDatosTema(true);
+            }
         }
-        if (item.getItemId() == R.id.accionAnhadirPlanta) {
-            insertarPlantasEnRecycler();
-        }
+
         return super.onOptionsItemSelected(item);
     }
 
-    private void guardarPlantas() {
+    public void guardandoDatosTema(boolean modoDark) {
 
+        SharedPreferences sharedPreferences = this.getSharedPreferences("preferenciasTema", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("modoDark", modoDark);
+        editor.apply();
+    }
+
+    public boolean recibiendoDatosTema() {
+
+        SharedPreferences sharedPreferences = this.getSharedPreferences("preferenciasTema", Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean("modoDark", false);
+    }
+
+    private void guardarPlantasEnBD() {
+
+        // Va a ficha principal
+        // fragmentPlantas lee la planta que sea según el switch que se haya tocado, y envia la planta usando listenerCambioPlanta.nuevaPlanta(planta);
         Planta girasol = new Planta("girasol", getString(R.string.nomComunGirasol), getString(R.string.nomCientificoGirasol), getString(R.string.temporadaGirasol), getString(R.string.descripcionGirasol), 0);
         Planta rosa = new Planta("rosa", getString(R.string.nomComunRosa), getString(R.string.nomCientificoRosa), getString(R.string.temporadaRosa), getString(R.string.descripcionRosa), 0);
         Planta aloe = new Planta("aloe", getString(R.string.nomComunAloe), getString(R.string.nomCientificoAloe), getString(R.string.temporadaAloe), getString(R.string.descripcionAloe), 0);
@@ -96,152 +166,14 @@ public class ActivityPrincipal extends AppCompatActivity implements SeleccionarP
         repositorioPlantas.insertar(crisantemo);
     }
 
-    public void accionInsertarPlantas(View view) {
-
-        insertarPlantasEnRecycler();
-    }
-
-    public void insertarPlantasEnRecycler() {
-
-        final List<Planta> listaPlantasBD = RepositorioPlantas.getInstance(this).obtenerPlantas();
-        final List<Planta> listaPlantasParaDialogo = new ArrayList<>();
-        for (Planta planta : listaPlantasBD) {
-
-            boolean plantaEncontrada = false;
-            for (Planta plantaBD : listaPlantasEscogidas) {
-
-                if (plantaBD.getKey() == planta.getKey()) {
-                    plantaEncontrada = true;
-                    break;
-                }
-            }
-
-            if (!plantaEncontrada) {
-                listaPlantasParaDialogo.add(planta);
-            }
-        }
-
-        if (listaPlantasParaDialogo.isEmpty()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(ActivityPrincipal.this);
-            builder.setIcon(R.drawable.list);
-            builder.setTitle("Añadir a lista");
-            builder.setMessage("Lista vacia, no hay plantas seleccionables.");
-            builder.setPositiveButton("Entendido", null);
-            builder.show();
-
-            return;
-        }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(ActivityPrincipal.this);
-        builder.setIcon(R.drawable.list);
-        builder.setTitle("Añadir a lista");
-
-        String[] arrayPlantas = new String[listaPlantasParaDialogo.size()];
-        final boolean[] plantasSeleccionadas = new boolean[listaPlantasParaDialogo.size()];
-        for (int i = 0; i < listaPlantasParaDialogo.size(); i++)
-            arrayPlantas[i] = listaPlantasParaDialogo.get(i).getNombre();
-        builder.setMultiChoiceItems(arrayPlantas, plantasSeleccionadas, (dialog, i, isChecked) -> plantasSeleccionadas[i] = isChecked);
-
-        builder.setPositiveButton("Añadir", (dialog, which) -> {
-
-            if(!listaPlantasParaDialogo.isEmpty()){
-
-                for (int i = plantasSeleccionadas.length - 1; i >= 0; i--) {
-                    if (plantasSeleccionadas[i]) {
-
-                        Planta plantaEscogida = listaPlantasParaDialogo.get(i);
-
-                        plantaEscogida.setSeleccionada(1);
-                        RepositorioPlantas.getInstance(ActivityPrincipal.this).actualizarPlanta(plantaEscogida);
-
-                        listaPlantasEscogidas.add(plantaEscogida);
-                    }
-                }
-            } else{
-                builder.setMessage("Lista vacia, no se puede seleccionar más plantas.");
-            }
-
-            adapterPlantas.actualizarListado(listaPlantasEscogidas);
-            comprobarElementos();
-            Toast.makeText(ActivityPrincipal.this, "Plantas añadidas", Toast.LENGTH_SHORT).show();
-        });
-        builder.setNegativeButton("Cancelar", null);
-        builder.create().show();
+    private void mostrarFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransition = getSupportFragmentManager().beginTransaction().replace(R.id.frameLayoutFragments, fragment);
+        fragmentTransition.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransition.commit();
     }
 
     @Override
-    public void eliminarPlanta(Planta planta) {
-
-        planta.setSeleccionada(0);
-        RepositorioPlantas.getInstance(ActivityPrincipal.this).actualizarPlanta(planta);
-
-        listaPlantasEscogidas.remove(planta);
-        adapterPlantas.actualizarListado(listaPlantasEscogidas);
-        comprobarElementos();
-    }
-
-    @Override
-    public void plantaInfoPulsado(Planta planta) {
-
-        //TODO:Hacer acceso a una webView para mostrar los datos de las plantas a través de la web de wikipedia preferentemente.
-        //TODO:Además, se debe controlar los enlaces que no son de wikipedia para que estas se abran en el navegador y no en la porpia web.
-
-        Intent intent = new Intent(this, ActivityDetalle.class);
-        intent.putExtra(CLAVE_PLANTA, planta);
-        startActivity(intent);
-        overridePendingTransition(R.anim.zoom_back_in, R.anim.zoom_back);
-    }
-
-    private void comprobarElementos() {
-
-        textViewNoPlantas.setVisibility(listaPlantasEscogidas.isEmpty() ? View.VISIBLE : View.GONE);
-    }
-
-    private void accionEliminar() {
-
-        AlertDialog.Builder builderElimina = new AlertDialog.Builder(ActivityPrincipal.this);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-        builderElimina.setIcon(R.drawable.remove_symbol);
-        builderElimina.setTitle("Eliminar");
-
-        String[] arrayPlantas = new String[listaPlantasEscogidas.size()];
-        final boolean[] plantasSeleccionados = new boolean[listaPlantasEscogidas.size()];
-        for (int i = 0; i < listaPlantasEscogidas.size(); i++)
-            arrayPlantas[i] = listaPlantasEscogidas.get(i).getNombre();
-        builderElimina.setMultiChoiceItems(arrayPlantas, plantasSeleccionados, (dialog, i, isChecked) -> plantasSeleccionados[i] = isChecked);
-
-        builderElimina.setPositiveButton("Borrar", (dialog, which) -> {
-
-            AlertDialog.Builder builderEliminar_Confirmar = new AlertDialog.Builder(ActivityPrincipal.this);
-            builderEliminar_Confirmar.setIcon(R.drawable.exclamation);
-            builderEliminar_Confirmar.setMessage("¿Eliminar los elementos?");
-            builderEliminar_Confirmar.setNegativeButton("Cancelar", null);
-            builderEliminar_Confirmar.setPositiveButton("Borrar", (dialogInterface, which1) -> {
-
-                for (int i = listaPlantasEscogidas.size() - 1; i >= 0; i--) {
-                    if (plantasSeleccionados[i]) {
-
-                        Planta plantaEscogida = listaPlantasEscogidas.get(i);
-
-                        plantaEscogida.setSeleccionada(0);
-                        RepositorioPlantas.getInstance(ActivityPrincipal.this).actualizarPlanta(plantaEscogida);
-
-                        listaPlantasEscogidas.remove(i);
-                    }
-                }
-                adapterPlantas.actualizarListado(listaPlantasEscogidas);
-                comprobarElementos();
-
-                Toast.makeText(ActivityPrincipal.this, "Plantas eliminadas", Toast.LENGTH_SHORT).show();
-            });
-            builderEliminar_Confirmar.create().show();
-        });
-        builderElimina.setNegativeButton("Cancelar", null);
-        builderElimina.create().show();
-    }
-
-    @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
 
         long tiempo = System.currentTimeMillis();
         if (tiempo - tiempoParaSalir > 3000) {
@@ -252,4 +184,15 @@ public class ActivityPrincipal extends AppCompatActivity implements SeleccionarP
             super.onBackPressed();
         }
     }
+
+    ///////////////////////////////////////////////////////////////////
+    // AÑADIR O QUITAR PLANTAS DESDE FRAGMENTPLANTAS
+    ///////////////////////////////////////////////////////////////////
+
+    @Override
+    public void actualizarListado() {
+        if (fragment_mi_jardin != null)
+            fragment_mi_jardin.actualizarListado();
+    }
+
 }

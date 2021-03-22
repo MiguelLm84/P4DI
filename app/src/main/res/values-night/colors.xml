@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="color_titulo">@color/toolbar</color>
+    <color name="color_titulo_item">@color/teal_700</color>
+    <color name="variant">#027170</color>
+
+</resources>

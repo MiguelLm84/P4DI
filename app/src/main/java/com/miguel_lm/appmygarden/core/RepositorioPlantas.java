@@ -43,6 +43,10 @@ public class RepositorioPlantas {
         }
     }
 
+    public Planta buscarPlanta(String nombre) {
+        return daoPlanta.buscarPlanta(nombre);
+    }
+
     public void borrarDatos() {
         daoPlanta.borrarDatos();
     }

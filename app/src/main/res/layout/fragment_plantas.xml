@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchPlantaGirasol"
+        style="@style/Theme.AppTheme.EtiquetaNormal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="32dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/russo_one"
+        android:text="@string/txt_girasol"
+        android:textSize="14sp"
+        app:thumbTint="@color/toolbar"
+        app:trackTint="@color/teal_700" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchPlantaRosa"
+        style="@style/Theme.AppTheme.EtiquetaNormal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="32dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/russo_one"
+        android:text="@string/txt_rosa"
+        android:textSize="14sp"
+        app:thumbTint="@color/toolbar"
+        app:trackTint="@color/teal_700"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchPlantaAloe"
+        style="@style/Theme.AppTheme.EtiquetaNormal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="32dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/russo_one"
+        android:text="@string/txtx_aloe"
+        android:textSize="14sp"
+        app:thumbTint="@color/toolbar"
+        app:trackTint="@color/teal_700"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchPlantaClavel"
+        style="@style/Theme.AppTheme.EtiquetaNormal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="32dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/russo_one"
+        android:text="@string/txt_clavel"
+        android:textSize="14sp"
+        app:thumbTint="@color/toolbar"
+        app:trackTint="@color/teal_700"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchPlantaManzanilla"
+        style="@style/Theme.AppTheme.EtiquetaNormal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="32dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/russo_one"
+        android:text="@string/txt_manzanilla"
+        android:textSize="14sp"
+        app:thumbTint="@color/toolbar"
+        app:trackTint="@color/teal_700"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchPlantaDienteDeLeon"
+        style="@style/Theme.AppTheme.EtiquetaNormal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="32dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/russo_one"
+        android:text="@string/txt_diente_leon"
+        android:textSize="14sp"
+        app:thumbTint="@color/toolbar"
+        app:trackTint="@color/teal_700"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchPlantaCactus"
+        style="@style/Theme.AppTheme.EtiquetaNormal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="32dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/russo_one"
+        android:text="@string/txt_cactus"
+        android:textSize="14sp"
+        app:thumbTint="@color/toolbar"
+        app:trackTint="@color/teal_700"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchPlantaCrisantemo"
+        style="@style/Theme.AppTheme.EtiquetaNormal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="50dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/russo_one"
+        android:text="@string/txt_crisantemo"
+        android:textSize="14sp"
+        app:thumbTint="@color/toolbar"
+        app:trackTint="@color/teal_700"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+</LinearLayout>

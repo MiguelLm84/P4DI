@@ -33,8 +33,6 @@ public class Planta implements Serializable {
         this.seleccionada = seleccionada;
     }
 
-
-
     public Planta(com.miguel_lm.appmygarden.core.Planta planta) {
         this.imagen = planta.imagen;
         this.nombre = planta.nombre;

@@ -1,27 +1,50 @@
 package com.miguel_lm.appmygarden.ui;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.appcompat.app.AppCompatDelegate;
+import com.google.android.material.textview.MaterialTextView;
 import com.miguel_lm.appmygarden.R;
 import com.miguel_lm.appmygarden.core.Planta;
 
 public class ActivityDetalle extends AppCompatActivity {
 
     private Planta planta;
-
     public static final String CLAVE_PLANTA = "1234";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalle);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        ImageView btn_volver = findViewById(R.id.btn_volver);
+
+        btn_volver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        if (recibiendoDatosTema()) {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
+        } else {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        }
 
         planta = (Planta) getIntent().getSerializableExtra(CLAVE_PLANTA);
         seleccionPlantaInfo();
@@ -39,20 +62,37 @@ public class ActivityDetalle extends AppCompatActivity {
     private void seleccionPlantaInfo() {
 
         ImageView imagenPlanta = findViewById(R.id.imageViewPlanta);
-        TextView tvTitulo = findViewById(R.id.tvNombre_InfoPlanta);
-        TextView tvNomComunPlanta = findViewById(R.id.tvNomComunPlanta);
-        TextView tvNomCientificoPlanta = findViewById(R.id.tvNomCientificoPlanta);
-        TextView tvNomTemporadaPlanta = findViewById(R.id.tvTemporadaPlanta);
-        TextView tvDescripcion = findViewById(R.id.tvDescripcion);
+        MaterialTextView tvTitulo = findViewById(R.id.tvNombre_InfoPlanta);
+        MaterialTextView tvNomCientificoPlanta = findViewById(R.id.tvNomCientificoPlanta);
+        MaterialTextView tvNomTemporadaPlanta = findViewById(R.id.tvTemporadaPlanta);
+        WebView webViewPlanta = findViewById(R.id.webViewPlanta);
 
         int imagenId = getResources().getIdentifier(planta.getImagen(), "drawable", getPackageName());
 
         imagenPlanta.setImageResource(imagenId);
         tvTitulo.setText(planta.getNombre());
-        tvNomComunPlanta.setText(getString(R.string.titulo_nombre_comun) + " " +  planta.getNombre());
         tvNomCientificoPlanta.setText(getString(R.string.titulo_nombre_cientifico) + " " +  planta.getNombreCientifico());
         tvNomTemporadaPlanta.setText(getString(R.string.titulo_temporada) + " " + planta.getTemporada());
-        tvDescripcion.setText(planta.getDescripcion());
+
+        webViewPlanta.getSettings().setJavaScriptEnabled(true);
+        webViewPlanta.setWebViewClient(new WebViewClient() {
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                if (request.getUrl().toString().contains("wikipedia")) return false;
+
+                Intent intent = new Intent(Intent.ACTION_VIEW, request.getUrl());
+                startActivity(intent);
+                return true;
+            }
+        });
+        webViewPlanta.loadUrl(planta.getDescripcion());
+    }
+
+    public boolean recibiendoDatosTema() {
+
+        SharedPreferences sharedPreferences = this.getSharedPreferences("preferenciasTema", Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean("modoDark", false);
     }
 
     @Override
