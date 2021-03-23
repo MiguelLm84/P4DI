@@ -4,5 +4,6 @@
     <color name="color_titulo">@color/toolbar</color>
     <color name="color_titulo_item">@color/teal_700</color>
     <color name="variant">#027170</color>
-
+    <color name="toolbar">#00BFA5</color>
+    <color name="titulo_tab">@color/teal_700</color>
 </resources>

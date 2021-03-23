@@ -3,10 +3,12 @@ package com.miguel_lm.appmygarden.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -26,7 +28,7 @@ public class ActivityDetalle extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalle);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 
         ImageView btn_volver = findViewById(R.id.btn_volver);
 
@@ -39,11 +41,9 @@ public class ActivityDetalle extends AppCompatActivity {
 
         if (recibiendoDatosTema()) {
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 
         } else {
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
 
         planta = (Planta) getIntent().getSerializableExtra(CLAVE_PLANTA);
@@ -71,10 +71,13 @@ public class ActivityDetalle extends AppCompatActivity {
 
         imagenPlanta.setImageResource(imagenId);
         tvTitulo.setText(planta.getNombre());
-        tvNomCientificoPlanta.setText(getString(R.string.titulo_nombre_cientifico) + " " +  planta.getNombreCientifico());
-        tvNomTemporadaPlanta.setText(getString(R.string.titulo_temporada) + " " + planta.getTemporada());
+        tvNomCientificoPlanta.setText(planta.getNombreCientifico());
+        tvNomTemporadaPlanta.setText(planta.getTemporada());
 
         webViewPlanta.getSettings().setJavaScriptEnabled(true);
+        webViewPlanta.getSettings().setBuiltInZoomControls(true);
+        webViewPlanta.getSettings().setDisplayZoomControls(false);
+
         webViewPlanta.setWebViewClient(new WebViewClient() {
 
             @Override

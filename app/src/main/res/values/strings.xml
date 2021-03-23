@@ -68,5 +68,7 @@
     <string name="switch_tema">SwitchTema</string>
     <string name="titulo_icono_sun">Sun</string>
     <string name="titulo_icono_moon">Moon</string>
+    <string name="mi_jardin">MI JARDIN</string>
+    <string name="plantas">PLANTAS</string>
 
 </resources>

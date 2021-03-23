@@ -4,7 +4,64 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondopantalla"
+    android:background="@drawable/fondo_slash_negro"
     tools:context=".ui.ActivitySplash">
+
+    <ImageView
+        android:id="@+id/imageViewLogo2"
+        android:layout_width="98dp"
+        android:layout_height="96dp"
+        android:layout_marginTop="212dp"
+        android:contentDescription="@string/todoFab"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/flor_de_cerezo_svg" />
+
+    <ImageView
+        android:id="@+id/imageViewLogo"
+        android:layout_width="190dp"
+        android:layout_height="208dp"
+        android:layout_marginTop="156dp"
+        android:background="@null"
+        android:contentDescription="@string/todoFab"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/ic_planta" />
+
+    <TextView
+        android:id="@+id/tv_tituloSlash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="308dp"
+        android:fontFamily="@font/domino"
+        android:gravity="center_horizontal"
+        android:text="@string/mygarden_negroSplash"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="50sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_tituloSlash2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/crkdownr"
+        android:gravity="center_horizontal"
+        android:text="@string/mygarden_negroSplash"
+        android:textColor="#FFFFFF"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

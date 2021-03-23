@@ -79,13 +79,11 @@ public class ActivityPrincipal extends AppCompatActivity implements ListenerCamb
         });
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_principal_planta, menu);
-        int FlagsModoOscuro = this.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+         int FlagsModoOscuro = this.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
 
         switch (FlagsModoOscuro) {
 
@@ -144,8 +142,6 @@ public class ActivityPrincipal extends AppCompatActivity implements ListenerCamb
 
     private void guardarPlantasEnBD() {
 
-        // Va a ficha principal
-        // fragmentPlantas lee la planta que sea según el switch que se haya tocado, y envia la planta usando listenerCambioPlanta.nuevaPlanta(planta);
         Planta girasol = new Planta("girasol", getString(R.string.nomComunGirasol), getString(R.string.nomCientificoGirasol), getString(R.string.temporadaGirasol), getString(R.string.descripcionGirasol), 0);
         Planta rosa = new Planta("rosa", getString(R.string.nomComunRosa), getString(R.string.nomCientificoRosa), getString(R.string.temporadaRosa), getString(R.string.descripcionRosa), 0);
         Planta aloe = new Planta("aloe", getString(R.string.nomComunAloe), getString(R.string.nomCientificoAloe), getString(R.string.temporadaAloe), getString(R.string.descripcionAloe), 0);
@@ -185,14 +181,9 @@ public class ActivityPrincipal extends AppCompatActivity implements ListenerCamb
         }
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // AÑADIR O QUITAR PLANTAS DESDE FRAGMENTPLANTAS
-    ///////////////////////////////////////////////////////////////////
-
     @Override
     public void actualizarListado() {
         if (fragment_mi_jardin != null)
             fragment_mi_jardin.actualizarListado();
     }
-
 }

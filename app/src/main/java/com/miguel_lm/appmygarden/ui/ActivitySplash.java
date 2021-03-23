@@ -15,7 +15,8 @@ public class ActivitySplash extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash_planta);
+        //setContentView(R.layout.splash_planta);
+        setContentView(R.layout.activity_splash);
 
         new Handler().postDelayed(() -> startActivity(new Intent(ActivitySplash.this, ActivityPrincipal.class)), 1500);
 

@@ -13,4 +13,8 @@
     <color name="fondo_claro">#A7FFEB</color>
     <color name="color_titulo_item">#00BFA5</color>
     <color name="variant">#26A69A</color>
+    <color name="titulo_tab">#00BFA5</color>
+    <color name="color_primary">#1DE9B6</color>
+    <color name="color_OnPrimary">#00BFA5</color>
+    <color name="color_Secundary">#A7FFEB</color>
 </resources>
